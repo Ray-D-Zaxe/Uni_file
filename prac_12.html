@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Merge and Deduplicate</title>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div>
+        <h1>Array Merge and Deduplicator</h1>
+        <p>Enter the elements for each array, separated by commas (e.g., 1, apple, 3, true).</p>
+
+        <!-- Input Fields -->
+        <div>
+            <label for="array1">Array 1 Elements:</label>
+            <textarea id="array1" rows="3" cols="50">1, 2, 3, apple, banana</textarea>
+        </div>
+        
+        <br>
+        
+        <div>
+            <label for="array2">Array 2 Elements:</label>
+            <textarea id="array2" rows="3" cols="50">3, 4, 5, banana, orange</textarea>
+        </div>
+        
+        <br>
+        
+        <!-- Calculation Button -->
+        <div>
+            <button onclick="performMergeAndDeduplicate()">Merge & Deduplicate</button>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
+        <!-- Result Display -->
+        <div>
+            <h2>Unique Merged Array:</h2>
+            <div id="result" style="border: 1px solid #000; padding: 10px; min-height: 50px;">Awaiting input...</div>
+        </div>
+        
+        <!-- Error/Message Display -->
+        <p id="message" style="color: red;"></p>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /**
+         * Parses a comma-separated string into an array, trimming whitespace.
+         * @param {string} inputString The raw string input from the textarea.
+         * @returns {Array} An array of strings (elements).
+         */
+        function parseArrayInput(inputString) {
+            if (!inputString || inputString.trim() === '') {
+                return [];
+            }
+            // Split by comma, trim whitespace from each element, and filter out any empty strings
+            return inputString.split(',')
+                              .map(item => item.trim())
+                              .filter(item => item !== '');
+        }
+
+        /**
+         * Merges two arrays and uses a Set to remove duplicate elements.
+         */
+        function performMergeAndDeduplicate() {
+            const array1Input = document.getElementById('array1');
+            const array2Input = document.getElementById('array2');
+            const resultDisplay = document.getElementById('result');
+            const messageDisplay = document.getElementById('message');
+
+            messageDisplay.textContent = ''; // Clear previous messages
+            resultDisplay.textContent = 'Processing...'; 
+
+            // 1. Parse Inputs
+            const array1 = parseArrayInput(array1Input.value);
+            const array2 = parseArrayInput(array2Input.value);
+
+            // Basic check if both inputs were empty
+            if (array1.length === 0 && array2.length === 0) {
+                messageDisplay.textContent = 'Please enter elements for at least one array.';
+                resultDisplay.textContent = 'No elements entered.';
+                return;
+            }
+
+            try {
+                // 2. Merge Arrays (using spread operator)
+                const mergedArray = [...array1, ...array2];
+                
+                // 3. Deduplicate (using the Set object)
+                // A Set automatically stores only unique values.
+                const uniqueSet = new Set(mergedArray);
+                
+                // 4. Convert back to Array
+                const uniqueArray = Array.from(uniqueSet);
+                
+                // 5. Display Result
+                resultDisplay.textContent = '[' + uniqueArray.join(', ') + ']';
+
+            } catch (e) {
+                // Handle unexpected errors
+                messageDisplay.textContent = 'An unexpected error occurred during processing.';
+                resultDisplay.textContent = 'ERR';
+                console.error('Deduplication Error:', e);
+            }
+        }
+    </script>
+
+</body>
+</html>
