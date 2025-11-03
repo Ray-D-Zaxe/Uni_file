@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factorial Calculator (Recursive)</title>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div>
+        <h1>Recursive Factorial Calculator</h1>
+
+        <!-- Input Field -->
+        <div>
+            <label for="inputNum">Enter a Non-Negative Integer:</label>
+            <input type="number" id="inputNum" value="5" min="0" step="1" placeholder="e.g., 5">
+        </div>
+        
+        <br>
+        
+        <!-- Calculation Button -->
+        <div>
+            <button onclick="performFactorialCalculation()">Calculate Factorial</button>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
+        <!-- Result Display -->
+        <div>
+            <label>RESULT:</label>
+            <div id="result">Awaiting input...</div>
+        </div>
+        
+        <!-- Error/Message Display -->
+        <p id="message"></p>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /**
+         * Recursively calculates the factorial of a non-negative integer.
+         * The factorial of a number n is the product of all positive integers less than or equal to n.
+         * * @param {number} n The non-negative integer to calculate the factorial for.
+         * @returns {number} The factorial of n.
+         */
+        function calculateFactorial(n) {
+            // Base Case: Factorial of 0 is 1. This stops the recursion.
+            if (n === 0) {
+                return 1;
+            }
+            
+            // Recursive Step: n * factorial(n - 1)
+            // Example: factorial(5) = 5 * factorial(4)
+            return n * calculateFactorial(n - 1);
+        }
+
+        /**
+         * Main function to handle user input, validation, and display the result.
+         */
+        function performFactorialCalculation() {
+            const inputElement = document.getElementById('inputNum');
+            const resultDisplay = document.getElementById('result');
+            const messageDisplay = document.getElementById('message');
+
+            messageDisplay.textContent = ''; // Clear previous messages
+            resultDisplay.textContent = 'Calculating...'; 
+
+            const inputValue = inputElement.value;
+            const n = parseInt(inputValue);
+            
+            // 1. Validation Checks
+            
+            // Check if input is empty or not a number
+            if (inputValue.trim() === '' || isNaN(n)) {
+                messageDisplay.textContent = 'Please enter a valid number.';
+                resultDisplay.textContent = 'ERR';
+                return;
+            }
+
+            // Check if the number is negative
+            if (n < 0) {
+                messageDisplay.textContent = 'Factorial is only defined for non-negative integers.';
+                resultDisplay.textContent = 'ERR';
+                return;
+            }
+            
+            // Check if the number is an integer (must be equal to its floor)
+            if (n !== Math.floor(n)) {
+                 messageDisplay.textContent = 'Factorial requires a whole number (integer).';
+                 resultDisplay.textContent = 'ERR';
+                 return;
+            }
+            
+            // Limit calculation for very large numbers to prevent excessive computation or overflow
+            if (n > 20) {
+                 messageDisplay.textContent = 'Input limited to numbers less than or equal to 20 for reliable calculation.';
+                 resultDisplay.textContent = 'ERR';
+                 return;
+            }
+
+            try {
+                // 2. Perform Calculation using the recursive function
+                const result = calculateFactorial(n);
+                
+                // 3. Display Result
+                resultDisplay.textContent = result.toLocaleString(); // Use locale string for formatting large numbers
+
+            } catch (e) {
+                // Handle potential stack overflow for extremely large, unchecked inputs (though we added a limit above)
+                messageDisplay.textContent = 'Calculation error or number too large.';
+                resultDisplay.textContent = 'ERR';
+                console.error('Factorial calculation error:', e);
+            }
+        }
+    </script>
+
+</body>
+</html>
