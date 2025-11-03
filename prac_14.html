@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Form Validation</title>
+</head>
+<body>
+
+    <h1>User Registration Form</h1>
+    
+    <!-- The form calls the validateForm function on submit -->
+    <!-- We use onsubmit="return validateForm(event)" to control submission -->
+    <form id="registrationForm" onsubmit="return validateForm(event)">
+        
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <!-- Span to display the error message for name -->
+            <span id="nameError"></span> 
+        </div>
+
+        <br>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email">
+            <!-- Span to display the error message for email -->
+            <span id="emailError"></span>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="password">Password (Min 6 chars):</label>
+            <input type="password" id="password" name="password">
+            <!-- Span to display the error message for password -->
+            <span id="passwordError"></span>
+        </div>
+        
+        <br>
+        
+        <button type="submit">Submit Registration</button>
+    </form>
+    
+    <hr>
+    
+    <h2>Validation Status:</h2>
+    <p id="formMessage">Awaiting submission...</p>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /**
+         * Validates the form inputs upon submission.
+         * @param {Event} event The submission event.
+         * @returns {boolean} False to prevent actual form submission for this demo.
+         */
+        function validateForm(event) {
+            // Prevent the browser's default form submission behavior for a client-side check
+            event.preventDefault(); 
+
+            // 1. Get Input Values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // 2. Get Error Message Placeholders
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const formMessage = document.getElementById('formMessage');
+
+            // 3. Clear Previous Errors
+            nameError.textContent = '';
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            formMessage.textContent = '';
+
+            let isValid = true;
+            
+            // --- Name Validation: Check if empty ---
+            if (name === '') {
+                nameError.textContent = '(Name is required)';
+                isValid = false;
+            }
+
+            // --- Email Validation: Check if empty and basic format ---
+            // Simple regex check for typical email structure (not exhaustive)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                emailError.textContent = '(Email is required)';
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                emailError.textContent = '(Invalid email format)';
+                isValid = false;
+            }
+
+            // --- Password Validation: Check if empty and minimum length ---
+            const minLength = 6;
+            if (password === '') {
+                passwordError.textContent = '(Password is required)';
+                isValid = false;
+            } else if (password.length < minLength) {
+                passwordError.textContent = '(Password must be at least ' + minLength + ' characters)';
+                isValid = false;
+            }
+
+            // --- Final Status Update ---
+            if (isValid) {
+                formMessage.textContent = 'Form successfully validated! (Data would now be submitted to the server.)';
+                // For a real application, you would allow submission here if you needed to
+                // event.target.submit(); 
+            } else {
+                formMessage.textContent = 'Please correct the errors above before submitting.';
+            }
+
+            // We return false here to always prevent the page from reloading on submit, which is typical for client-side demos.
+            return false;
+        }
+    </script>
+
+</body>
+</html>
