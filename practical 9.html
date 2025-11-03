@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form Validation</title>
+    <script>
+        function validateForm() {
+            // Get form values
+            var name = document.forms["regForm"]["name"].value;
+            var email = document.forms["regForm"]["email"].value;
+            var password = document.forms["regForm"]["password"].value;
+            var phone = document.forms["regForm"]["phone"].value;
+
+            // Name validation
+            if (name == "") {
+                alert("Please enter your name");
+                return false;
+            }
+
+            // Email validation
+            var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email.match(emailPattern)) {
+                alert("Please enter a valid email address");
+                return false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long");
+                return false;
+            }
+
+            // Phone validation
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phone.match(phonePattern)) {
+                alert("Please enter a valid 10-digit phone number");
+                return false;
+            }
+
+            alert("Registration Successful!");
+            return true;
+        }
+    </script>
+</head>
+<body style="font-family: Arial; margin: 40px;">
+
+    <h2>Registration Form</h2>
+    <hr>
+
+    <form name="regForm" onsubmit="return validateForm()">
+        <label>Full Name:</label><br>
+        <input type="text" name="name" placeholder="Enter your name"><br><br>
+
+        <label>Email:</label><br>
+        <input type="text" name="email" placeholder="Enter your email"><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" placeholder="Enter your password"><br><br>
+
+        <label>Phone:</label><br>
+        <input type="text" name="phone" placeholder="Enter your phone number"><br><br>
+
+        <input type="submit" value="Register">
+        <input type="reset" value="Reset">
+    </form>
+
+</body>
+</html>
+`   

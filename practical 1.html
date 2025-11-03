@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clickable Image in R</title>
+  <style>
+    img {
+      float: left;
+      margin-right: 20px;
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://www.google.com" target="_blank">
+    <img src="https://via.placeholder.com/200" alt="Click to open Google">
+  </a>
+
+  <h2>Welcome to My Web Page</h2>
+  <p>Click the image on the left to open Google.</p>
+</body>
+</html>
+'
+
+# Write the HTML content to a file
+cat(html_code, file = "clickable_image.html")
+
+# Optional: Open the created file in your default browser
+browseURL("clickable_image.html")
