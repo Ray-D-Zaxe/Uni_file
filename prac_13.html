@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Color Changer</title>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div>
+        <h1>Dynamic Text Color Changer</h1>
+
+        <!-- Target Paragraph -->
+        <p id="targetText">
+            Click the button below to dynamically change the color of this text using pure JavaScript!
+        </p>
+        
+        <br>
+        
+        <!-- Action Button -->
+        <div>
+            <button onclick="changeColor()">Change Text Color</button>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Array of colors to cycle through
+        const colors = ['red', 'blue', 'green', 'purple', 'orange', 'black', 'brown'];
+        let colorIndex = 0; // Index to keep track of the current color
+
+        /**
+         * Changes the text color of the target paragraph element when called.
+         */
+        function changeColor() {
+            // Get the element whose color needs to be changed
+            const paragraph = document.getElementById('targetText');
+            
+            // Check if the element exists
+            if (!paragraph) {
+                console.error('Target paragraph element not found.');
+                return;
+            }
+
+            // Set the new color using the next color in the array.
+            // This is the dynamic manipulation of the element's style property.
+            paragraph.style.color = colors[colorIndex];
+            
+            // Move to the next index, cycling back to the start of the array when the end is reached
+            colorIndex = (colorIndex + 1) % colors.length;
+
+            // Optional: Log the change to the console (for demonstration)
+            console.log('Text color changed to: ' + paragraph.style.color);
+        }
+    </script>
+
+</body>
+</html>
