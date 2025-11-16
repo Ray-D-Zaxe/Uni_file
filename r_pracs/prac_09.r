@@ -1,0 +1,66 @@
+# ==============================================================================
+# R PRACTICAL 9: DATA MANIPULATION WITH DPLYR
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. Install and Load the necessary package
+# (Run this line only if you don't have the package installed)
+# install.packages("dplyr") 
+library(dplyr)
+
+# 2. Use the built-in 'iris' dataset
+data_df <- iris
+
+cat("\n--- 1. INITIAL DATA STRUCTURE ---\n")
+str(data_df)
+cat("-----------------------------------\n")
+
+
+# ------------------------------------------------------------------------------
+# A. FILTERING DATA (subsetting rows)
+# Function: filter()
+# ------------------------------------------------------------------------------
+
+# Filter for rows where the Species is 'setosa' AND Sepal.Length is greater than 5.0
+filtered_data <- data_df |>
+  filter(Species == "setosa" & Sepal.Length > 5.0)
+
+cat("\n--- 2. FILTERED DATA (setosa & Length > 5.0) ---\n")
+print(head(filtered_data))
+cat("Total filtered rows:", nrow(filtered_data), "\n")
+
+
+# ------------------------------------------------------------------------------
+# B. SORTING DATA (arranging rows)
+# Function: arrange()
+# ------------------------------------------------------------------------------
+
+# Sort the entire dataset first by Species (alphabetical) and then by 
+# Sepal.Width in DESCENDING order (use desc()).
+sorted_data <- data_df |>
+  arrange(Species, desc(Sepal.Width))
+
+cat("\n--- 3. SORTED DATA (Species, then Sepal.Width DESC) ---\n")
+print(head(sorted_data))
+print(tail(sorted_data)) # Show the end where the largest widths should appear
+
+
+# ------------------------------------------------------------------------------
+# C. GROUPING AND SUMMARIZING DATA
+# Functions: group_by() and summarize()
+# ------------------------------------------------------------------------------
+
+# Group the data by 'Species' and then calculate the mean and standard deviation
+# of Petal.Length for each species group.
+summary_data <- data_df |>
+  group_by(Species) |>
+  summarize(
+    Count = n(),                                     # Count the number of rows in the group
+    Mean_Petal_Length = mean(Petal.Length, na.rm = TRUE),
+    SD_Petal_Length = sd(Petal.Length, na.rm = TRUE),
+    .groups = 'drop' # Recommended: drop the grouping structure after summarizing
+  )
+
+cat("\n--- 4. GROUPED AND SUMMARIZED DATA ---\n")
+print(summary_data)
+cat("--------------------------------------\n")
