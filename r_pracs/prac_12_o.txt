@@ -1,0 +1,155 @@
+> # ==============================================================================
+> # R PRACTICAL 12: DATA INTEGRATION (CSV, EXCEL, JSON)
+> # Subject: Data Mining with R (Master's Level)
+> # ==============================================================================
+> 
+> # 1. INSTALL AND LOAD NECESSARY PACKAGES
+> # dplyr: For data manipulation and combining (bind_rows).
+> # readr: For efficient reading of CSV files.
+> # readxl: For reading Excel files (.xlsx).
+> # jsonlite: For reading JSON files.
+> 
+> # Run these lines if you don't have the packages installed
+> # install.packages(c("dplyr", "readr", "readxl", "jsonlite"))
+> 
+> library(dplyr)
+> library(readr)
+> library(readxl)
+> library(jsonlite)
+> 
+> cat("\n--- PACKAGES LOADED ---\n")
+
+--- PACKAGES LOADED ---
+> 
+> 
+> # ------------------------------------------------------------------------------
+> # 2. SIMULATE READING DATA FROM DIFFERENT SOURCES
+> # Note: In a real scenario, replace the lines below with actual file paths.
+> # ------------------------------------------------------------------------------
+> 
+> ### A. CSV Data (e.g., Customer basic info)
+> # We use readr::read_csv for better performance than base R's read.csv
+> data_csv <- readr::read_csv(
++   # Using I() to treat the string as the file content
++   I("ID,Name,Segment
++ C101,Alice,Retail
++ C102,Bob,Corporate
++ C103,Charlie,Retail
++ C104,David,Corporate"),
++   show_col_types = FALSE
++ )
+> cat("\n--- A. DATA FROM CSV (readr) ---\n")                                                                             
+
+--- A. DATA FROM CSV (readr) ---
+> print(data_csv)
+# A tibble: 4 × 3
+  ID    Name    Segment  
+  <chr> <chr>   <chr>    
+1 C101  Alice   Retail   
+2 C102  Bob     Corporate
+3 C103  Charlie Retail   
+4 C104  David   Corporate
+> 
+> 
+> ### B. Excel Data (e.g., Sales Metrics)
+> # Since we cannot actually read a file without creating one, we simulate the result.
+> # In a real setup, you would use: data_excel <- read_excel("path/to/sales_data.xlsx", sheet = 1)
+> data_excel <- data.frame(
++   ID = c("C101", "C102", "C103", "C104"),
++   Sales_2024 = c(5000, 12000, 8000, 9500),
++   Last_Quarter_Growth = c(0.15, 0.05, 0.20, 0.10)
++ )
+> cat("\n--- B. SIMULATED DATA FROM EXCEL (readxl) ---\n")
+
+--- B. SIMULATED DATA FROM EXCEL (readxl) ---
+> print(data_excel)
+    ID Sales_2024 Last_Quarter_Growth
+1 C101       5000                0.15
+2 C102      12000                0.05
+3 C103       8000                0.20
+4 C104       9500                0.10
+> 
+> 
+> ### C. JSON Data (e.g., Customer Location)
+> # We use jsonlite::fromJSON to parse a JSON structure.
+> json_string <- '[
++   {"id": "C101", "City": "NY", "Country": "USA"},
++   {"id": "C102", "City": "London", "Country": "UK"},
++   {"id": "C103", "City": "Paris", "Country": "France"},
++   {"id": "C104", "City": "Berlin", "Country": "Germany"}
++ ]'
+> data_json <- fromJSON(json_string)
+> 
+> # Rename the ID column in JSON data to match the others
+> names(data_json)[1] <- "ID" 
+> cat("\n--- C. DATA FROM JSON (jsonlite) ---\n")
+
+--- C. DATA FROM JSON (jsonlite) ---
+> print(data_json)
+    ID   City Country
+1 C101     NY     USA
+2 C102 London      UK
+3 C103  Paris  France
+4 C104 Berlin Germany
+> 
+> 
+> # ------------------------------------------------------------------------------
+> # 3. DATA COMBINATION AND JOINING
+> # ------------------------------------------------------------------------------
+> 
+> # Step 1: Join CSV and Excel data using 'ID' as the common key (Inner Join)
+> # Both sources have the same 4 customers, so Inner Join is appropriate here.
+> data_combined_1 <- data_csv |> 
++   inner_join(data_excel, by = "ID")
+> 
+> cat("\n--- STEP 1: CSV + EXCEL JOIN ---\n")
+
+--- STEP 1: CSV + EXCEL JOIN ---
+> print(data_combined_1)
+# A tibble: 4 × 5
+  ID    Name    Segment   Sales_2024 Last_Quarter_Growth
+  <chr> <chr>   <chr>          <dbl>               <dbl>
+1 C101  Alice   Retail          5000                0.15
+2 C102  Bob     Corporate      12000                0.05
+3 C103  Charlie Retail          8000                0.2 
+4 C104  David   Corporate       9500                0.1 
+> 
+> 
+> # Step 2: Join the result with the JSON data (Inner Join)
+> # This final join integrates the location information.
+> data_final_clean <- data_combined_1 |>
++   inner_join(data_json, by = "ID")
+> 
+> cat("\n--- STEP 2: FINAL CLEAN DATA FRAME ---\n")
+
+--- STEP 2: FINAL CLEAN DATA FRAME ---
+> print(data_final_clean)
+# A tibble: 4 × 7
+  ID    Name    Segment   Sales_2024 Last_Quarter_Growth City   Country
+  <chr> <chr>   <chr>          <dbl>               <dbl> <chr>  <chr>  
+1 C101  Alice   Retail          5000                0.15 NY     USA    
+2 C102  Bob     Corporate      12000                0.05 London UK     
+3 C103  Charlie Retail          8000                0.2  Paris  France 
+4 C104  David   Corporate       9500                0.1  Berlin Germany
+> cat("\nFinal Structure Check:\n")
+
+Final Structure Check:
+> str(data_final_clean)
+spc_tbl_ [4 × 7] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ ID                 : chr [1:4] "C101" "C102" "C103" "C104"
+ $ Name               : chr [1:4] "Alice" "Bob" "Charlie" "David"
+ $ Segment            : chr [1:4] "Retail" "Corporate" "Retail" "Corporate"
+ $ Sales_2024         : num [1:4] 5000 12000 8000 9500
+ $ Last_Quarter_Growth: num [1:4] 0.15 0.05 0.2 0.1
+ $ City               : chr [1:4] "NY" "London" "Paris" "Berlin"
+ $ Country            : chr [1:4] "USA" "UK" "France" "Germany"
+ - attr(*, "spec")=
+  .. cols(
+  ..   ID = col_character(),
+  ..   Name = col_character(),
+  ..   Segment = col_character()
+  .. )
+ - attr(*, "problems")=<externalptr> 
+> cat("---------------------------------------\n")
+---------------------------------------
+> 

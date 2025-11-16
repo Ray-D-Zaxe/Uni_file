@@ -1,0 +1,93 @@
+# ==============================================================================
+# R PRACTICAL 12: DATA INTEGRATION (CSV, EXCEL, JSON)
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. INSTALL AND LOAD NECESSARY PACKAGES
+# dplyr: For data manipulation and combining (bind_rows).
+# readr: For efficient reading of CSV files.
+# readxl: For reading Excel files (.xlsx).
+# jsonlite: For reading JSON files.
+
+# Run these lines if you don't have the packages installed
+# install.packages(c("dplyr", "readr", "readxl", "jsonlite"))
+
+library(dplyr)
+library(readr)
+library(readxl)
+library(jsonlite)
+
+cat("\n--- PACKAGES LOADED ---\n")
+
+
+# ------------------------------------------------------------------------------
+# 2. SIMULATE READING DATA FROM DIFFERENT SOURCES
+# Note: In a real scenario, replace the lines below with actual file paths.
+# ------------------------------------------------------------------------------
+
+### A. CSV Data (e.g., Customer basic info)
+# We use readr::read_csv for better performance than base R's read.csv
+data_csv <- readr::read_csv(
+  # Using I() to treat the string as the file content
+  I("ID,Name,Segment
+C101,Alice,Retail
+C102,Bob,Corporate
+C103,Charlie,Retail
+C104,David,Corporate"),
+  show_col_types = FALSE
+)
+cat("\n--- A. DATA FROM CSV (readr) ---\n")
+print(data_csv)
+
+
+### B. Excel Data (e.g., Sales Metrics)
+# Since we cannot actually read a file without creating one, we simulate the result.
+# In a real setup, you would use: data_excel <- read_excel("path/to/sales_data.xlsx", sheet = 1)
+data_excel <- data.frame(
+  ID = c("C101", "C102", "C103", "C104"),
+  Sales_2024 = c(5000, 12000, 8000, 9500),
+  Last_Quarter_Growth = c(0.15, 0.05, 0.20, 0.10)
+)
+cat("\n--- B. SIMULATED DATA FROM EXCEL (readxl) ---\n")
+print(data_excel)
+
+
+### C. JSON Data (e.g., Customer Location)
+# We use jsonlite::fromJSON to parse a JSON structure.
+json_string <- '[
+  {"id": "C101", "City": "NY", "Country": "USA"},
+  {"id": "C102", "City": "London", "Country": "UK"},
+  {"id": "C103", "City": "Paris", "Country": "France"},
+  {"id": "C104", "City": "Berlin", "Country": "Germany"}
+]'
+data_json <- fromJSON(json_string)
+
+# Rename the ID column in JSON data to match the others
+names(data_json)[1] <- "ID" 
+cat("\n--- C. DATA FROM JSON (jsonlite) ---\n")
+print(data_json)
+
+
+# ------------------------------------------------------------------------------
+# 3. DATA COMBINATION AND JOINING
+# ------------------------------------------------------------------------------
+
+# Step 1: Join CSV and Excel data using 'ID' as the common key (Inner Join)
+# Both sources have the same 4 customers, so Inner Join is appropriate here.
+data_combined_1 <- data_csv |> 
+  inner_join(data_excel, by = "ID")
+
+cat("\n--- STEP 1: CSV + EXCEL JOIN ---\n")
+print(data_combined_1)
+
+
+# Step 2: Join the result with the JSON data (Inner Join)
+# This final join integrates the location information.
+data_final_clean <- data_combined_1 |>
+  inner_join(data_json, by = "ID")
+
+cat("\n--- STEP 2: FINAL CLEAN DATA FRAME ---\n")
+print(data_final_clean)
+cat("\nFinal Structure Check:\n")
+str(data_final_clean)
+cat("---------------------------------------\n")
