@@ -1,0 +1,69 @@
+# ==============================================================================
+# R PRACTICAL 7: DATA CLEANING (MISSING VALUES & RENAMING)
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. CREATE A SAMPLE DATASET WITH MISSING VALUES (NA)
+
+data_dirty <- data.frame(
+  Feature_A = c(10, 20, NA, 40, 50, 60),
+  Feature_B = c("X", "Y", "X", "Z", NA, "Y"),
+  Target_C  = c(2.1, NA, 4.5, 6.7, 8.9, 10.1)
+)
+
+cat("\n--- 1. INITIAL DIRTY DATASET ---\n")
+print(data_dirty)
+cat("\nSummary of Missing Values (NA):\n")
+print(colSums(is.na(data_dirty))) # Check NA counts per column
+
+
+# ------------------------------------------------------------------------------
+# 2. RENAMING COLUMNS PROGRAMMATICALLY
+# ------------------------------------------------------------------------------
+
+# Rename columns to be more descriptive and R-friendly.
+
+# A. Renaming by Index (e.g., Column 3)
+# We access the column names vector and change the name at the third position.
+names(data_dirty)[3] <- "Response_Value"
+
+# B. Renaming by Name (e.g., Column 1)
+# Recommended method: Use names() to find the old name and assign the new name.
+names(data_dirty)[names(data_dirty) == "Feature_A"] <- "Input_1"
+
+cat("\n--- 2. DATASET AFTER RENAMING COLUMNS ---\n")
+print(data_dirty)
+cat("New Column Names:", names(data_dirty), "\n")
+
+
+# ------------------------------------------------------------------------------
+# 3. HANDLING MISSING VALUES (IMPUTATION)
+# We will use Mean Imputation for the numeric column (Response_Value).
+# Note: For categorical columns (like Feature_B), mode imputation or deletion is often preferred.
+# ------------------------------------------------------------------------------
+
+# Identify the numeric column with NAs
+column_name <- "Response_Value"
+
+# A. Calculate the Mean (ignoring NA values)
+# The na.rm = TRUE argument is critical to calculate the mean correctly.
+mean_value <- mean(data_dirty[[column_name]], na.rm = TRUE)
+cat("\nCalculated Mean for Imputation:", mean_value, "\n")
+
+
+# B. Perform Imputation
+# Use is.na() to find the indices of the missing values in the column,
+# and assign the calculated mean_value to those positions.
+na_indices <- is.na(data_dirty[[column_name]])
+data_dirty[na_indices, column_name] <- mean_value
+
+
+# 4. FINAL CHECK
+
+cat("\n--- 4. CLEANED DATASET (After Imputation) ---\n")
+print(data_dirty)
+cat("\nFinal Summary of Missing Values (NA):\n")
+print(colSums(is.na(data_dirty)))
+
+# Note on remaining NA: Feature_B still has one NA, as we only imputed the numeric column.
+# A complete cleaning process would handle Feature_B next (e.g., remove the row, or impute with 'mode').
