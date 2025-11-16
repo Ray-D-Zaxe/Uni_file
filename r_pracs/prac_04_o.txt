@@ -1,0 +1,47 @@
+> # ==============================================================================
+> # R PRACTICAL 4: MULTIPLICATION TABLE USING FOR LOOP
+> # Subject: Data Mining with R (Master's Level)
+> # ==============================================================================
+> 
+> # 1. Define the number for which the table is to be generated
+> number <- 9
+> 
+> # 2. Define the range/limit for the table (e.g., up to 10)
+> limit <- 10
+> 
+> cat("\n--- MULTIPLICATION TABLE FOR", number, "---\n")
+
+--- MULTIPLICATION TABLE FOR 9 ---
+> 
+> # 3. Use a 'for' loop to iterate through the sequence
+> # The 'for' loop iterates over the vector '1:limit' (which is c(1, 2, ..., 10))
+> # The iterator variable 'i' takes on each value in the sequence one by one.
+> for (i in 1:limit) {
++   
++   # Calculate the result for the current line
++   result <- number * i
++   
++   # Print the result in a readable format using paste()
++   # paste() combines text and variables into a single string.
++   # The '\n' is omitted from cat to allow for paste() to format the line.
++   cat(paste(number, "x", i, "=", result, "\n"))
++ }
+9 x 1 = 9 
+9 x 2 = 18 
+9 x 3 = 27 
+9 x 4 = 36 
+9 x 5 = 45 
+9 x 6 = 54 
+9 x 7 = 63 
+9 x 8 = 72 
+9 x 9 = 81 
+9 x 10 = 90 
+> 
+> cat("----------------------------------\n")
+----------------------------------
+> 
+> # A compact way to generate the results (optional, demonstrating vectorization)
+> # Note: While loops are often used, for loops are excellent for known iterations.
+> # results_vector <- number * (1:limit)
+> # print(results_vector)
+> 
