@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 9: DATA MANIPULATION WITH DPLYR
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # 1. Install and Load the necessary package
 > # (Run this line only if you don't have the package installed)

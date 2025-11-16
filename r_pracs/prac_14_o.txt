@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 14: CLUSTERING PERFORMANCE COMPARISON (K-means vs. H-Clustering)
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # 1. Load necessary packages
 > # cluster: Provides silhouette score calculation and hierarchical clustering functions.

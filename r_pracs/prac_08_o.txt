@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 8: REUSABLE SUMMARY STATISTICS FUNCTION
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # Note: R base does not have a built-in 'mode' function. We must define it.
 > # The mode is the value that appears most often in a set of data.

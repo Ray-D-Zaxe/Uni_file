@@ -1,7 +1,5 @@
 # ==============================================================================
 # R PRACTICAL 12: DATA INTEGRATION (CSV, EXCEL, JSON)
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
 
 # 1. INSTALL AND LOAD NECESSARY PACKAGES
 # dplyr: For data manipulation and combining (bind_rows).

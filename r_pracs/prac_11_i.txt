@@ -1,7 +1,5 @@
 # ==============================================================================
 # R PRACTICAL 11: MERGE AND JOIN DATA FRAMES
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
 
 # 1. Load the necessary package
 library(dplyr)

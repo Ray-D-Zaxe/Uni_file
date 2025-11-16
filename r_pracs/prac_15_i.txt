@@ -1,8 +1,5 @@
 # ==============================================================================
 # R PRACTICAL 15: COMPLETE DATA ANALYSIS PIPELINE (LOGISTIC REGRESSION)
-# Patched for Memory Efficiency using 'pROC' for ROC calculation.
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
 
 # 1. Install and Load necessary packages
 # caTools: For data splitting.

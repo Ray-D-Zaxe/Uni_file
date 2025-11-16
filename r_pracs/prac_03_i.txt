@@ -1,7 +1,5 @@
 # ==============================================================================
 # R PRACTICAL 3: CONDITIONAL CHECK (POSITIVE, NEGATIVE, OR ZERO)
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
 
 # 1. Define the number to be checked
 # You can change this value to test the different conditions.

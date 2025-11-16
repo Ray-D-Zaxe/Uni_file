@@ -1,7 +1,5 @@
 # ==============================================================================
-# R PRACTICAL 2: BASIC ARITHMETIC OPERATIONS
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
+# R PRACTICAL 2: BASIC ARITHMETIC operations
 
 # 1. Define two numbers (operands)
 # We will use 'x' and 'y' for the demonstration.

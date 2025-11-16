@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 13: K-MEANS CLUSTERING AND ELBOW METHOD
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # 1. Install and Load necessary packages
 > # cluster: Provides clustering algorithms and diagnostics.

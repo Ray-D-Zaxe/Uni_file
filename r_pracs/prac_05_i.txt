@@ -1,7 +1,5 @@
 # ==============================================================================
 # R PRACTICAL 5: FACTORIAL CALCULATION USING WHILE LOOP
-# Subject: Data Mining with R (Master's Level)
-# ==============================================================================
 
 # 1. Define the number for which the factorial is to be calculated
 number <- 7 

@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 10: CREATING DERIVED VARIABLES (CONDITIONAL LOGIC)
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # 1. Load the necessary package
 > # The mutate() and case_when() functions are part of dplyr.

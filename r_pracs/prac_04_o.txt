@@ -1,7 +1,5 @@
 > # ==============================================================================
 > # R PRACTICAL 4: MULTIPLICATION TABLE USING FOR LOOP
-> # Subject: Data Mining with R (Master's Level)
-> # ==============================================================================
 > 
 > # 1. Define the number for which the table is to be generated
 > number <- 9
