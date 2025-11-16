@@ -1,0 +1,64 @@
+# ==============================================================================
+# R PRACTICAL 6: DATA LOADING, STRUCTURE, AND SUMMARY
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. DATA LOADING
+# ------------------------------------------------------------------------------
+
+# 💡 A. Standard CSV Loading (Use this when you have your own file)
+# NOTE: Replace "your_data_file.csv" with the actual path to your data file.
+# The 'header = TRUE' argument tells R the first row contains variable names.
+# The 'stringsAsFactors = TRUE' converts character columns to factors (categories).
+# my_data <- read.csv("your_data_file.csv", header = TRUE, stringsAsFactors = TRUE)
+
+# 💡 B. Using Built-in Data (For demonstration purposes)
+# We will use the 'iris' dataset, a classic dataset for statistical analysis.
+data_set <- iris
+
+cat("\n--- 1. DATA LOADING SUCCESSFUL ---\n")
+cat("Dataset used:", deparse(substitute(data_set)), "\n")
+cat("----------------------------------\n")
+
+
+# ------------------------------------------------------------------------------
+# 2. EXPLORING DATA STRUCTURE
+# The str() function is the single most useful command for initial exploration.
+# ------------------------------------------------------------------------------
+
+cat("\n--- 2. DATA STRUCTURE (str()) ---\n")
+str(data_set)
+
+# Insights from str():
+# - It shows the number of observations (rows) and variables (columns).
+# - It lists the name and data type (e.g., num, Factor) of each column.
+# - It displays the first few values for each variable.
+
+
+# ------------------------------------------------------------------------------
+# 3. DISPLAY BASIC SUMMARY STATISTICS
+# The summary() function provides quick descriptive statistics.
+# ------------------------------------------------------------------------------
+
+cat("\n--- 3. BASIC SUMMARY STATISTICS (summary()) ---\n")
+summary(data_set)
+
+# Insights from summary():
+# For Numeric Columns:
+# - It provides the minimum (Min.), 1st Quartile (1st Qu.), Median, Mean, 3rd Quartile (3rd Qu.), and Maximum (Max.).
+# - This quickly reveals the distribution, center, and spread of the data.
+
+# For Factor/Categorical Columns:
+# - It provides a count of the frequency (number of occurrences) for each category level.
+
+
+# ------------------------------------------------------------------------------
+# 4. QUICK VIEW OF HEAD/TAIL (Optional but Recommended)
+# ------------------------------------------------------------------------------
+
+cat("\n--- 4. FIRST 6 ROWS (head()) ---\n")
+head(data_set)
+
+cat("\n--- LAST 6 ROWS (tail()) ---\n")
+tail(data_set)
