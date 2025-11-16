@@ -1,0 +1,44 @@
+# ==============================================================================
+# R PRACTICAL 3: CONDITIONAL CHECK (POSITIVE, NEGATIVE, OR ZERO)
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. Define the number to be checked
+# You can change this value to test the different conditions.
+number_to_check <- -10.5
+
+cat("\n--- CHECKING NUMBER:", number_to_check, "---\n")
+
+# 2. Implement the if-else if-else logic
+# The structure checks conditions sequentially.
+
+if (number_to_check > 0) {
+  # This block executes if the number is strictly greater than zero (Positive)
+  
+  cat(number_to_check, "is a POSITIVE number.\n")
+  
+} else if (number_to_check < 0) {
+  # This block executes if the first condition was FALSE, AND the number is strictly less than zero (Negative)
+  
+  cat(number_to_check, "is a NEGATIVE number.\n")
+  
+} else {
+  # This block executes if both previous conditions ( > 0 and < 0) were FALSE, 
+  # which means the number MUST be equal to zero.
+  
+  cat(number_to_check, "is ZERO.\n")
+  
+}
+
+# --- Test with another value (e.g., Zero) ---
+number_to_check_2 <- 0
+
+cat("\n--- CHECKING NUMBER:", number_to_check_2, "---\n")
+
+if (number_to_check_2 > 0) {
+  cat(number_to_check_2, "is a POSITIVE number.\n")
+} else if (number_to_check_2 < 0) {
+  cat(number_to_check_2, "is a NEGATIVE number.\n")
+} else {
+  cat(number_to_check_2, "is ZERO.\n")
+}
