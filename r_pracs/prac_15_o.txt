@@ -1,0 +1,197 @@
+> # ==============================================================================
+> # R PRACTICAL 15: COMPLETE DATA ANALYSIS PIPELINE (LOGISTIC REGRESSION)
+> # Patched for Memory Efficiency using 'pROC' for ROC calculation.
+> # Subject: Data Mining with R (Master's Level)
+> # ==============================================================================
+> 
+> # 1. Install and Load necessary packages
+> # caTools: For data splitting.
+> # caret: For confusion matrix and overall model evaluation.
+> # dplyr: For data preparation.
+> # ggplot2: For general visualization.
+> # pROC: For memory-efficient ROC/AUC calculation and plotting.
+> 
+> # Run these lines if you don't have the packages installed
+> # install.packages(c("dplyr", "caTools", "caret", "ggplot2", "pROC")) 
+> 
+> library(dplyr)
+> library(caTools)
+> library(caret)
+> library(ggplot2)
+> library(pROC) # Added for memory-efficient ROC calculation
+> 
+> cat("\n--- 1. PACKAGES LOADED ---\n")
+
+--- 1. PACKAGES LOADED ---
+> 
+> # ------------------------------------------------------------------------------
+> # 2. DATA LOADING, CLEANING, AND PREPARATION
+> # ------------------------------------------------------------------------------
+> 
+> # Load the data
+> df <- iris
+> 
+> # Convert the problem to Binary Classification: Is it 'setosa' or 'Not Setosa'?
+> # Only use the first 100 observations (setosa and versicolor) for simplicity
+> df_binary <- df %>%
++   filter(Species != "virginica") %>%
++   mutate(
++     # Create the binary Target Variable (0/1)
++     Target = ifelse(Species == "setosa", 1, 0),
++     # Ensure Target is a factor for caret functions
++     Target = factor(Target, levels = c(0, 1)) 
++   ) %>%
++   select(-Species) # Remove the original categorical species column
+> 
+> cat("\n--- 2. DATA PREPARATION ---\n")
+
+--- 2. DATA PREPARATION ---
+> cat("Binary Target Distribution:\n")
+Binary Target Distribution:
+> print(table(df_binary$Target))
+
+ 0  1 
+50 50 
+> 
+> 
+> # ------------------------------------------------------------------------------
+> # 3. DATA SPLITTING (Train/Test Split)
+> # ------------------------------------------------------------------------------
+> 
+> # Set seed for reproducibility
+> set.seed(42)
+> 
+> # Split the data into 70% Training and 30% Testing
+> sample <- sample.split(df_binary$Target, SplitRatio = 0.70)
+> train_data <- subset(df_binary, sample == TRUE)
+> test_data <- subset(df_binary, sample == FALSE)
+> 
+> cat("\n--- 3. DATA SPLITTING ---\n")
+
+--- 3. DATA SPLITTING ---
+> cat("Training set rows:", nrow(train_data), "\n")
+Training set rows: 70 
+> cat("Testing set rows:", nrow(test_data), "\n")
+Testing set rows: 30 
+> 
+> 
+> # ------------------------------------------------------------------------------
+> # 4. MODEL BUILDING: LOGISTIC REGRESSION
+> # ------------------------------------------------------------------------------
+> 
+> logistic_model <- glm(Target ~ ., 
++                       data = train_data, 
++                       family = binomial(link = "logit"))
+Warning messages:
+1: glm.fit: algorithm did not converge 
+2: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+> 
+> cat("\n--- 4. LOGISTIC REGRESSION MODEL SUMMARY ---\n")
+
+--- 4. LOGISTIC REGRESSION MODEL SUMMARY ---
+> print(summary(logistic_model))
+
+Call:
+glm(formula = Target ~ ., family = binomial(link = "logit"), 
+    data = train_data)
+
+Coefficients:
+               Estimate Std. Error z value Pr(>|z|)
+(Intercept)      19.465 455432.698       0        1
+Sepal.Length      3.029 119147.263       0        1
+Sepal.Width       8.056 108854.905       0        1
+Petal.Length    -18.074 175273.740       0        1
+Petal.Width     -17.154 471766.312       0        1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 9.7041e+01  on 69  degrees of freedom
+Residual deviance: 8.4319e-10  on 65  degrees of freedom
+AIC: 10
+
+Number of Fisher Scoring iterations: 25
+
+> 
+> 
+> # ------------------------------------------------------------------------------
+> # 5. MODEL EVALUATION AND PREDICTION
+> # ------------------------------------------------------------------------------
+> 
+> # Predict probabilities on the test set
+> test_probabilities <- predict(logistic_model, 
++                               newdata = test_data, 
++                               type = "response")
+> 
+> # Convert probabilities to binary predictions (0.5 cutoff)
+> test_predictions <- factor(ifelse(test_probabilities > 0.5, 1, 0), levels = c(0, 1))
+> 
+> 
+> # A. CONFUSION MATRIX and ACCURACY
+> cat("\n--- 5A. CONFUSION MATRIX AND ACCURACY ---\n")
+
+--- 5A. CONFUSION MATRIX AND ACCURACY ---
+> 
+> cm <- confusionMatrix(test_predictions, test_data$Target)
+> print(cm)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction  0  1
+         0 15  0
+         1  0 15
+                                     
+               Accuracy : 1          
+                 95% CI : (0.8843, 1)
+    No Information Rate : 0.5        
+    P-Value [Acc > NIR] : 9.313e-10  
+                                     
+                  Kappa : 1          
+                                     
+ Mcnemar's Test P-Value : NA         
+                                     
+            Sensitivity : 1.0        
+            Specificity : 1.0        
+         Pos Pred Value : 1.0        
+         Neg Pred Value : 1.0        
+             Prevalence : 0.5        
+         Detection Rate : 0.5        
+   Detection Prevalence : 0.5        
+      Balanced Accuracy : 1.0        
+                                     
+       'Positive' Class : 0          
+                                     
+> 
+> # Extract key metrics
+> accuracy <- cm$overall['Accuracy']
+> cat(paste("\nModel Accuracy:", round(accuracy, 4), "\n"))
+
+Model Accuracy: 1 
+> 
+> 
+> # B. ROC CURVE AND AUC (Memory Efficient using pROC)
+> cat("\n--- 5B. ROC CURVE AND AUC ---\n")
+
+--- 5B. ROC CURVE AND AUC ---
+> 
+> # Calculate the ROC object directly from actual class and probabilities
+> roc_obj <- roc(test_data$Target, test_probabilities)
+Setting levels: control = 0, case = 1
+Setting direction: controls < cases
+> auc_value <- auc(roc_obj)
+> cat(paste("AUC (Area Under Curve):", round(auc_value, 4), "\n"))
+AUC (Area Under Curve): 1 
+> 
+> # Plot the ROC Curve using the pROC's plotting function (ggroc)
+> roc_plot <- ggroc(roc_obj, colour = 'blue', size = 1) + 
++   geom_abline(intercept = 1, slope = 1, linetype = "dashed", color = "grey") +
++   labs(title = paste("ROC Curve (AUC:", round(auc_value, 4), ")"),
++        x = "False Positive Rate (1 - Specificity)",
++        y = "True Positive Rate (Sensitivity)") +
++   theme_minimal()
+> 
+> print(roc_plot)
+> # 
+> 
+> cat("\n--- PIPELINE COMPLETE ---\n")
+
+--- PIPELINE COMPLETE ---
