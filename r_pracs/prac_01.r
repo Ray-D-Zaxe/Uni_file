@@ -1,0 +1,100 @@
+# ==============================================================================
+# R PRACTICAL 1: DEMONSTRATING R DATA TYPES
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# I. ATOMIC VECTORS (The fundamental building blocks - must be homogeneous)
+# ------------------------------------------------------------------------------
+
+# 1. NUMERIC
+# The default numeric type is 'double' (floating-point number).
+numeric_double <- 10.5
+numeric_integer <- 42L # The 'L' suffix explicitly forces it to be an integer.
+
+cat("\n--- 1. NUMERIC ---\n")
+print(numeric_double)
+print(typeof(numeric_double)) # Shows the storage type (double)
+print(class(numeric_double))  # Shows the high-level class (numeric)
+
+print(numeric_integer)
+print(typeof(numeric_integer)) # Shows the storage type (integer)
+print(class(numeric_integer))  # Shows the high-level class (integer)
+
+
+# 2. CHARACTER (String)
+char_data <- "Mastering R for Data Mining"
+
+cat("\n--- 2. CHARACTER ---\n")
+print(char_data)
+print(typeof(char_data))
+print(class(char_data))
+
+
+# 3. LOGICAL (Boolean)
+logical_data <- TRUE
+logical_false <- F # F is a shorthand for FALSE
+
+cat("\n--- 3. LOGICAL ---\n")
+print(logical_data)
+print(typeof(logical_data))
+print(class(logical_data))
+
+
+# 4. VECTOR (Ordered sequence of elements of the same type)
+# Vectors are the foundation of R. Single values are also vectors of length 1.
+data_vector <- c(1, 5.5, 9, 13) # Creates a numeric vector
+mixed_vector <- c(1, "two", TRUE) # R coerces all elements to the least restrictive type (character)
+
+cat("\n--- 4. VECTOR ---\n")
+print(data_vector)
+print(class(data_vector))
+print(length(data_vector))
+
+cat("Mixed Vector (Coercion):\n")
+print(mixed_vector)
+print(class(mixed_vector)) # Note: It is now a character vector
+print(typeof(mixed_vector))
+
+
+# ------------------------------------------------------------------------------
+# II. ADVANCED DATA STRUCTURES (Can be heterogeneous or specialized)
+# ------------------------------------------------------------------------------
+
+# 5. FACTOR
+# Used for categorical data, storing levels and their corresponding integer codes.
+gender_data <- c("male", "female", "male", "other", "female")
+gender_factor <- factor(gender_data)
+
+cat("\n--- 5. FACTOR ---\n")
+print(gender_factor)
+print(class(gender_factor))
+print(typeof(gender_factor)) # Stored internally as an integer vector
+print(levels(gender_factor)) # Shows the predefined categories
+
+# Ordering factors (important for ordered categorical data)
+rating_factor <- factor(c("low", "medium", "high", "low"), ordered = TRUE, 
+                        levels = c("low", "medium", "high"))
+cat("\nOrdered Factor:\n")
+print(rating_factor)
+
+
+# 6. LIST
+# A container that can hold elements of different types (heterogeneous).
+data_list <- list(
+  Title = "Model Parameters",
+  Iterations = 500,
+  Trained = TRUE,
+  Results_Vector = c(0.85, 0.91, 0.79),
+  Related_List = list(Algorithm = "K-Means")
+)
+
+cat("\n--- 6. LIST ---\n")
+print(data_list)
+print(class(data_list))
+
+# Accessing list elements:
+cat("\nAccessing List Elements:\n")
+cat("By Name ($):", data_list$Title, "\n")
+cat("By Position ([[ ]]):", data_list[[2]], "\n")
+print(data_list$Results_Vector[1]) # Accessing an element within a nested vector element

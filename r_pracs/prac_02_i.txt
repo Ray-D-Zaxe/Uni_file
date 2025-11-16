@@ -1,0 +1,46 @@
+# ==============================================================================
+# R PRACTICAL 2: BASIC ARITHMETIC OPERATIONS
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. Define two numbers (operands)
+# We will use 'x' and 'y' for the demonstration.
+x <- 27
+y <- 5
+
+cat("\n--- OPERANDS ---\n")
+cat("x =", x, "\n")
+cat("y =", y, "\n")
+cat("----------------\n")
+
+
+# 2. Perform the basic arithmetic operations
+
+# A. Addition (+)
+addition_result <- x + y
+cat("A. Addition (x + y):", addition_result, "\n")
+
+# B. Subtraction (-)
+subtraction_result <- x - y
+cat("B. Subtraction (x - y):", subtraction_result, "\n")
+
+# C. Multiplication (*)
+multiplication_result <- x * y
+cat("C. Multiplication (x * y):", multiplication_result, "\n")
+
+# D. Division (/)
+division_result <- x / y
+cat("D. Division (x / y):", division_result, "\n")
+
+# E. Modulo (%%) - The remainder after division
+# This operation is useful in data mining for cyclic patterns or binning.
+modulo_result <- x %% y
+cat("E. Modulo (x %% y):", modulo_result, "\n")
+
+# F. Integer Division (%/%) - The quotient without the remainder
+integer_division_result <- x %/% y
+cat("F. Integer Division (x %/% y):", integer_division_result, "\n")
+
+# G. Exponentiation (^) or (**)
+exponentiation_result <- x ^ 2
+cat("G. Exponentiation (x ^ 2):", exponentiation_result, "\n")
