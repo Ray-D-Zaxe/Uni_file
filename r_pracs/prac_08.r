@@ -1,0 +1,88 @@
+# ==============================================================================
+# R PRACTICAL 8: REUSABLE SUMMARY STATISTICS FUNCTION
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# Note: R base does not have a built-in 'mode' function. We must define it.
+# The mode is the value that appears most often in a set of data.
+get_mode <- function(v) {
+  # Remove NA values for accurate mode calculation
+  v_clean <- v[!is.na(v)]
+  
+  if (length(v_clean) == 0) {
+    return(NA) # Handle empty vectors
+  }
+  
+  # Tabulate the frequency of each unique value
+  uniqv <- unique(v_clean)
+  
+  # Find the value(s) with the maximum frequency
+  mode_result <- uniqv[which.max(tabulate(match(v_clean, uniqv)))]
+  
+  # If there are multiple modes, only the first one found is returned.
+  return(mode_result)
+}
+
+
+# ------------------------------------------------------------------------------
+# THE MAIN REUSABLE FUNCTION
+# ------------------------------------------------------------------------------
+
+calculate_numeric_summary <- function(df) {
+  
+  # 1. Identify numeric columns
+  # We use sapply to check the class of each column, returning TRUE for 'numeric' or 'integer' types.
+  numeric_cols <- names(df)[sapply(df, is.numeric) | sapply(df, is.integer)]
+  
+  if (length(numeric_cols) == 0) {
+    stop("Error: No numeric or integer columns found in the data frame.")
+  }
+  
+  # Initialize an empty data frame to store the results
+  summary_results <- data.frame(
+    Statistic = c("Mean", "Median", "Mode", "Std Dev")
+  )
+  
+  # 2. Loop through each identified numeric column
+  for (col_name in numeric_cols) {
+    
+    # Extract the column data
+    col_data <- df[[col_name]]
+    
+    # Calculate the four statistics, ensuring NA values are removed (na.rm = TRUE)
+    stat_mean <- mean(col_data, na.rm = TRUE)
+    stat_median <- median(col_data, na.rm = TRUE)
+    stat_mode <- get_mode(col_data) # Use our custom mode function
+    stat_sd <- sd(col_data, na.rm = TRUE)
+    
+    # Create a vector of the calculated statistics
+    stats_vector <- c(stat_mean, stat_median, stat_mode, stat_sd)
+    
+    # Add the results as a new column in the summary_results data frame
+    summary_results[[col_name]] <- stats_vector
+  }
+  
+  # Round the numeric results for cleaner display (2 decimal places)
+  summary_results[, -1] <- round(summary_results[, -1], 2)
+  
+  return(summary_results)
+}
+
+
+# ------------------------------------------------------------------------------
+# 3. DEMONSTRATION
+# ------------------------------------------------------------------------------
+
+# Use the built-in 'iris' dataset for demonstration (contains 4 numeric columns)
+data_for_analysis <- iris
+
+cat("\n--- DATA FRAME STRUCTURE (iris) ---\n")
+str(data_for_analysis)
+
+# Execute the function
+summary_table <- calculate_numeric_summary(data_for_analysis)
+
+cat("\n--- REUSABLE SUMMARY STATISTICS ---\n")
+print(summary_table)
+
+cat("\n--- Function Execution Complete ---\n")
