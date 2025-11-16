@@ -1,0 +1,84 @@
+# ==============================================================================
+# R PRACTICAL 11: MERGE AND JOIN DATA FRAMES
+# Subject: Data Mining with R (Master's Level)
+# ==============================================================================
+
+# 1. Load the necessary package
+library(dplyr)
+
+# 2. Create Sample Data Frames
+# Data_A contains customer IDs and demographic info.
+Data_A <- data.frame(
+  CustomerID = c("A001", "A002", "A003", "A004", "A005"),
+  Region = c("North", "South", "East", "West", "North"),
+  Age = c(30, 45, 22, 58, 35)
+)
+
+# Data_B contains transaction info for a subset of customers.
+Data_B <- data.frame(
+  CustomerID = c("A001", "A003", "A005", "A006", "A007"), # A006, A007 are new
+  Total_Spent = c(150.50, 290.00, 75.25, 120.99, 45.10),
+  Last_Visit_Days = c(10, 5, 20, 3, 15)
+)
+
+cat("\n--- DATA A (Demographics) ---\n")
+print(Data_A)
+cat("\n--- DATA B (Transactions) ---\n")
+print(Data_B)
+cat("--------------------------------\n")
+
+
+# The key column for joining is 'CustomerID'.
+join_key <- "CustomerID"
+
+
+# ------------------------------------------------------------------------------
+# A. INNER JOIN: Returns only rows with matching keys in BOTH data frames.
+# (A001, A003, A005)
+# ------------------------------------------------------------------------------
+
+inner_result <- Data_A |> inner_join(Data_B, by = join_key)
+
+cat("\n--- A. INNER JOIN (Matching in A and B) ---\n")
+print(inner_result)
+cat("Rows:", nrow(inner_result), "\n")
+
+
+# ------------------------------------------------------------------------------
+# B. LEFT JOIN: Returns all rows from the LEFT table (Data_A),
+# and the matching rows from Data_B. Non-matching rows from Data_B are filled with NA.
+# (A001, A002, A003, A004, A005)
+# ------------------------------------------------------------------------------
+
+left_result <- Data_A |> left_join(Data_B, by = join_key)
+
+cat("\n--- B. LEFT JOIN (All rows from Data A) ---\n")
+print(left_result)
+cat("Rows:", nrow(left_result), "\n")
+
+
+# ------------------------------------------------------------------------------
+# C. RIGHT JOIN: Returns all rows from the RIGHT table (Data_B),
+# and the matching rows from Data_A. Non-matching rows from Data_A are filled with NA.
+# (A001, A003, A005, A006, A007)
+# ------------------------------------------------------------------------------
+
+right_result <- Data_A |> right_join(Data_B, by = join_key)
+
+cat("\n--- C. RIGHT JOIN (All rows from Data B) ---\n")
+print(right_result)
+cat("Rows:", nrow(right_result), "\n")
+
+
+# ------------------------------------------------------------------------------
+# D. FULL JOIN: Returns all rows and columns from BOTH tables,
+# filling NA where there are no matches.
+# (A001, A002, A003, A004, A005, A006, A007)
+# ------------------------------------------------------------------------------
+
+full_result <- Data_A |> full_join(Data_B, by = join_key)
+
+cat("\n--- D. FULL JOIN (All rows from A and B) ---\n")
+print(full_result)
+cat("Rows:", nrow(full_result), "\n")
+cat("--------------------------------------------\n")
